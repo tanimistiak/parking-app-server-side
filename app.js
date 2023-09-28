@@ -9,7 +9,7 @@ const PORT = 8080;
 app.use(
   cors({
     credentials: true,
-    origin: "https://rad-moonbeam-e18db0.netlify.app",
+    origin: "https://parking-app-client-side.onrender.com",
   })
 );
 app.use(express.json());
