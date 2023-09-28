@@ -4,6 +4,7 @@ const userRouter = require("./routes/api/v1/users.route");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const baseRouter = require("./routes/api/v1/base.route");
+const parkingRouter = require("./routes/parking.route");
 const app = express();
 const PORT = 8080;
 app.use(
@@ -17,6 +18,7 @@ app.use(cookieParser());
 dbConnect();
 
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/parking", parkingRouter);
 app.use("/", baseRouter);
 app.get("/", (req, res) => {
   res.send("hello");

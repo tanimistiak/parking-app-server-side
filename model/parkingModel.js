@@ -5,8 +5,12 @@ const parkingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    durationUnit: {
+    parkingSlotName: {
       type: String,
+      required: true,
+    },
+    duration: {
+      type: [String],
       enum: ["minutes", "hours", "days"],
     },
     status: {
@@ -16,6 +20,20 @@ const parkingSchema = new mongoose.Schema(
     },
     ip: {
       type: String,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+    },
+    postCode: {
+      type: Number,
+    },
+    createdBy: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }
