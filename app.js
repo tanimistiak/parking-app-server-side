@@ -13,7 +13,7 @@ const PORT = 8080;
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: "https://parking-app-client-side.onrender.com",
   })
 );
 app.use(express.json());
