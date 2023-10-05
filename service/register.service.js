@@ -35,7 +35,7 @@ module.exports.loginUserService = async (req, res) => {
   console.log(req.body);
   const { email, password } = req.body;
   const foundUser = await userModel.findOne({ email });
-  const hashedPass = foundUser.password;
+  const hashedPass = foundUser?.password;
   if (foundUser) {
     try {
       bcrypt.compare(password, hashedPass, function (err, result) {

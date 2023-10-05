@@ -5,20 +5,26 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const baseRouter = require("./routes/api/v1/base.route");
 const parkingRouter = require("./routes/parking.route");
+const publicUsersRouter = require("./routes/api/v1/publicUsers.route");
+const bodyParser = require("body-parser");
+
 const app = express();
 const PORT = 8080;
 app.use(
   cors({
     credentials: true,
-    origin: "https://parking-app-client-side.onrender.com",
+    origin: "http://localhost:3000",
   })
 );
 app.use(express.json());
+
 app.use(cookieParser());
+
 dbConnect();
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/parking", parkingRouter);
+app.use("/api/v1/publicUsers", publicUsersRouter);
 app.use("/", baseRouter);
 app.get("/", (req, res) => {
   res.send("hello");
