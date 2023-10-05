@@ -35,6 +35,18 @@ const parkingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    fullAddress: {
+      type: Object,
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    placeId: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
