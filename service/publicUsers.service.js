@@ -134,3 +134,33 @@ module.exports.publicUsersRetrieveImageService = (req, res) => {
     }
   }
 };
+
+module.exports.publicUsersLoginService = async (req, res) => {
+  console.log(req.body);
+  const { email, password } = req.body;
+  const foundUser = await publicUserModel.findOne({ email });
+  const hashedPass = foundUser?.password;
+  if (foundUser) {
+    try {
+      bcrypt.compare(password, hashedPass, function (err, result) {
+        if (err) throw err;
+        if (result) {
+          jwt.sign(foundUser.toJSON(), process.env.JWT_TOKEN, (err, token) => {
+            if (err) throw err;
+            res
+              .status(200)
+              .cookie("userToken", token)
+              .json({ id: foundUser._id, email: foundUser.email });
+          });
+        }
+        if (!result) {
+          res.send("pass not matched");
+        }
+      });
+    } catch (error) {
+      res.json(error.message);
+    }
+  } else {
+    res.send("user not found");
+  }
+};

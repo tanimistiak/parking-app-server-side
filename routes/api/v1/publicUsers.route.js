@@ -6,6 +6,7 @@ const {
   allPublicUsersController,
   publicUsersProfileUpdateController,
   publicUsersRetrieveImageController,
+  publicUsersLoginController,
 } = require("../../../controller/publicUsers.controller");
 const upload = require("../../../utils/multerInstance");
 
@@ -18,7 +19,9 @@ publicUsersRouter
 publicUsersRouter.route("/retrieveimage/:email").get((req, res) => {
   publicUsersRetrieveImageController(req, res);
 });
-publicUsersRouter.route("/login");
+publicUsersRouter.route("/login").post((req, res) => {
+  publicUsersLoginController(req, res);
+});
 
 publicUsersRouter
   .route("/userprofile")

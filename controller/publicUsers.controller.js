@@ -5,6 +5,7 @@ const {
   allPublicUsersService,
   publicUsersProfileUpdateService,
   publicUsersRetrieveImageService,
+  publicUsersLoginService,
 } = require("../service/publicUsers.service");
 
 module.exports.publicUsersController = (req, res) => {
@@ -23,4 +24,8 @@ module.exports.publicUsersProfileUpdateController = (req, res) => {
 
 module.exports.publicUsersRetrieveImageController = (req, res) => {
   publicUsersRetrieveImageService(req, res);
+};
+
+module.exports.publicUsersLoginController = (req, res) => {
+  publicUsersLoginService(req, res);
 };
