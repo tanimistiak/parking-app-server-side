@@ -13,12 +13,14 @@ const PORT = 8080;
 app.use(
   cors({
     credentials: true,
-    origin: "https://parking-app-client-side.onrender.com",
+    origin: "https://parking-management-ed2e7.web.app",
   })
 );
 app.use(express.json());
 
 app.use(cookieParser());
+
+app.use(express.static("public"));
 
 dbConnect();
 
