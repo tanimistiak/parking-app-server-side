@@ -128,7 +128,7 @@ module.exports.publicUsersRetrieveImageService = (req, res) => {
     console.log(imagePath);
     if (fs.existsSync(imagePath)) {
       const image = fs.readFileSync(imagePath);
-      res.setHeader("Content-Type", "image/png");
+      res.setHeader("Content-Type", "image/jpeg");
       console.log(image);
       res.send(image);
     }
