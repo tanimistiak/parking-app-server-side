@@ -43,7 +43,7 @@ module.exports.publicUsersService = (req, res) => {
 
           res
             .status(200)
-            .cookie("userToken", token)
+            .cookie("userToken", token, { domain: ".onrender.com" })
 
             .json({
               id: createdUser._id,
@@ -149,7 +149,7 @@ module.exports.publicUsersLoginService = async (req, res) => {
             if (err) throw err;
             res
               .status(200)
-              .cookie("userToken", token)
+              .cookie("userToken", token, { domain: ".onrender.com" })
               .json({ id: foundUser._id, email: foundUser.email });
           });
         }
