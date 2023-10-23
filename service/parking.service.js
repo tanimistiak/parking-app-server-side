@@ -30,3 +30,13 @@ module.exports.parkingListService = async (req, res) => {
     console.log(error);
   }
 };
+
+module.exports.getAllParkingService = async (req, res) => {
+  console.log("hello");
+  try {
+    const allParking = await parkingModel.find({});
+    res.status(200).json(allParking);
+  } catch (error) {
+    res.json(error.message);
+  }
+};

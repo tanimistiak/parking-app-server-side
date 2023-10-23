@@ -7,6 +7,7 @@ const saltRounds = 10;
 
 module.exports.publicUsersService = (req, res) => {
   const { email, password } = req.body;
+  console.log(email, password);
   fs.renameSync(
     req.file.path,
     "public/uploads/" + req.body.email + "." + req.file.mimetype.split("/")[1]
@@ -43,7 +44,7 @@ module.exports.publicUsersService = (req, res) => {
 
           res
             .status(200)
-            .cookie("userToken", token, { domain: ".onrender.com" })
+            .cookie("userToken", token)
 
             .json({
               id: createdUser._id,
@@ -149,7 +150,7 @@ module.exports.publicUsersLoginService = async (req, res) => {
             if (err) throw err;
             res
               .status(200)
-              .cookie("userToken", token, { domain: ".onrender.com" })
+              .cookie("userToken", token)
               .json({ id: foundUser._id, email: foundUser.email });
           });
         }

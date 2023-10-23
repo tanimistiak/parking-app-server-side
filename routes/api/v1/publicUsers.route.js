@@ -14,6 +14,7 @@ const publicUsersRouter = require("express").Router();
 publicUsersRouter
   .route("/register")
   .post(upload.single("file"), async (req, res) => {
+    console.log(req);
     publicUsersController(req, res);
   });
 publicUsersRouter.route("/retrieveimage/:email").get((req, res) => {
