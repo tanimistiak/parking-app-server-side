@@ -2,6 +2,7 @@ const {
   createParking,
   parkingListController,
   getAllParkingController,
+  singleParkingDetailsController,
 } = require("../controller/parking.controller");
 
 const parkingRouter = require("express").Router();
@@ -13,7 +14,11 @@ parkingRouter
   .get((req, res) => {
     getAllParkingController(req, res);
   });
+parkingRouter.route("/view-parking/:id").get((req, res) => {
+  singleParkingDetailsController(req, res);
+});
 parkingRouter.route("/:email").get((req, res) => {
   parkingListController(req, res);
 });
+
 module.exports = parkingRouter;

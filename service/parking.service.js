@@ -40,3 +40,15 @@ module.exports.getAllParkingService = async (req, res) => {
     res.json(error.message);
   }
 };
+
+module.exports.singleParkingDetailsService = async (req, res) => {
+  console.log("hello");
+  const { id } = req.params;
+  // console.log(id);
+  try {
+    const allParking = await parkingModel.findById(id);
+    res.status(200).json(allParking);
+  } catch (error) {
+    if (error) throw error;
+  }
+};
