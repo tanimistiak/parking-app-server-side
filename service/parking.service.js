@@ -47,6 +47,7 @@ module.exports.singleParkingDetailsService = async (req, res) => {
   // console.log(id);
   try {
     const allParking = await parkingModel.findById(id);
+    console.log(allParking);
     res.status(200).json(allParking);
   } catch (error) {
     if (error) throw error;
