@@ -3,48 +3,38 @@ const bookingModel = require("../model/bookingModel");
 module.exports.postBookingService = async (req, res) => {
   //   console.log("booking");
   try {
-    const body = req?.body;
-    const {
-      parkingId,
-      fromHourInt,
-      toHourInt,
-      fromMinuteInt,
-      toMinuteInt,
-      bookingDate,
-    } = body;
+    const { startTime, endTime } = req.body;
 
-    // console.log(dayMonthYear);
-    console.log(bookingDate);
-    const bookingCollection = await bookingModel.find({
-      parkingId: parkingId,
-      bookingDate: bookingDate,
+    // Check for overlapping bookings
+    const overlappingBooking = await bookingModel.findOne({
       $or: [
         {
-          fromHourInt: { $gte: fromHourInt, $lt: toHourInt },
-          toHourInt: { $lte: toHourInt },
+          $and: [
+            { startTime: { $lte: startTime } },
+            { endTime: { $gte: startTime } },
+          ],
         },
         {
-          fromHourInt: { $lte: fromHourInt },
-          toHourInt: { $gte: fromHourInt, $lt: toHourInt },
-        },
-        {
-          fromHourInt: { $lte: fromHourInt, $lt: toHourInt },
-          toHourInt: { $gte: toHourInt },
+          $and: [
+            { startTime: { $lte: endTime } },
+            { endTime: { $gte: endTime } },
+          ],
         },
       ],
     });
 
-    console.log(bookingCollection);
-    /* if (bookingCollection.length > 0) {
-      res.json("already booked");
-    } else {
-      const postedData = await bookingModel.create({
-        ...body,
-        bookingDate: bookingDate.split("T")[0],
-      });
-      res.status(200).json(postedData);
-    } */
+    if (overlappingBooking) {
+      console.log(overlappingBooking);
+      return res.status(400).json({ error: "Overlapping booking detected" });
+    }
+
+    // Create the booking
+    const newBooking = await bookingModel.create(req.body);
+    await newBooking.save();
+
+    res.status(201).json({ message: "Booking created successfully" });
   } catch (error) {
-    if (error) throw error;
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };

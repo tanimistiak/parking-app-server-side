@@ -1,32 +1,21 @@
 const mongoose = require("mongoose");
 const bookingSchema = new mongoose.Schema(
   {
-    bookingDate: {
-      type: String,
-      required: true,
-    },
     parkingId: {
       type: String,
       required: true,
     },
-    fromHourInt: {
-      type: Number,
+    startTime: {
+      type: String,
       required: true,
     },
-    toHourInt: {
-      type: Number,
+    endTime: {
+      type: String,
       required: true,
     },
-    fromMinuteInt: {
-      type: Number,
-      required: true,
-    },
-    toMinuteInt: {
-      type: Number,
-      required: true,
-    },
-    difference: {
-      type: Number,
+
+    email: {
+      type: String,
       required: true,
     },
   },
