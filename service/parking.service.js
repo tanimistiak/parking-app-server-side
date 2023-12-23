@@ -1,14 +1,14 @@
 const parkingModel = require("../model/parkingModel");
 
 module.exports.createParkingService = async (req, res) => {
-  console.log(req.body);
   try {
     const data = req.body;
+    console.log(data);
     const createdParking = await parkingModel.create(data);
     if (createdParking) {
       res.json(createdParking);
     } else {
-      res.json("couldn not create");
+      res.json("error");
     }
   } catch (error) {
     console.log(error);

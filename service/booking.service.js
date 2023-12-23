@@ -100,7 +100,45 @@ module.exports.postBookingService = async (req, res) => {
 
       res.json({ message: "Booking created successfully" });
     }
-    // Check for overlapping bookings
+    if (method == "day") {
+      const { date } = req.body;
+      const startTime = date + "T00:00";
+      const endTime = date + "T23:59";
+      const overlappingBooking = await bookingModel.findOne({
+        $or: [
+          {
+            $and: [
+              { startTime: { $lte: startTime } },
+              { endTime: { $gte: startTime } },
+              { parkingId: parkingId },
+            ],
+          },
+          {
+            $and: [
+              { startTime: { $lte: endTime } },
+              { endTime: { $gte: endTime } },
+              { parkingId: parkingId },
+            ],
+          },
+        ],
+      });
+      if (overlappingBooking) {
+        console.log(overlappingBooking);
+        return res.json({ error: "Overlapping day booking detected" });
+      }
+
+      // Create the booking
+      const newBooking = await bookingModel.create({
+        email: email,
+        endTime: endTime,
+        method: method,
+        parkingId: parkingId,
+        startTime: startTime,
+      });
+      await newBooking.save();
+
+      res.json({ message: "Booking created successfully" });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
