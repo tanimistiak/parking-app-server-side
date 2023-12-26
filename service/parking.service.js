@@ -3,7 +3,7 @@ const parkingModel = require("../model/parkingModel");
 module.exports.createParkingService = async (req, res) => {
   try {
     const data = req.body;
-    console.log(data);
+
     const createdParking = await parkingModel.create(data);
     if (createdParking) {
       res.json(createdParking);
@@ -15,7 +15,6 @@ module.exports.createParkingService = async (req, res) => {
   }
 };
 module.exports.parkingListService = async (req, res) => {
-  console.log(req.params);
   try {
     const { email } = req.params;
     const allParking = (await parkingModel.find({})).filter(
@@ -32,7 +31,6 @@ module.exports.parkingListService = async (req, res) => {
 };
 
 module.exports.getAllParkingService = async (req, res) => {
-  console.log("hello");
   try {
     const allParking = await parkingModel.find({});
     res.status(200).json(allParking);
@@ -47,9 +45,37 @@ module.exports.singleParkingDetailsService = async (req, res) => {
   // console.log(id);
   try {
     const allParking = await parkingModel.findById(id);
-    console.log(allParking);
+
     res.status(200).json(allParking);
   } catch (error) {
     if (error) throw error;
+  }
+};
+
+module.exports.findParkingByLocationService = async (req, res) => {
+  const { location } = req.params;
+  console.log(req.params);
+  try {
+    if (location != "undefined") {
+      const foundLocation = await parkingModel.find();
+      const matchLocation = foundLocation.filter((foundLocation) =>
+        foundLocation.parkingLocation
+          .toLowerCase()
+          .includes(location.toLowerCase())
+      );
+      console.log(matchLocation);
+      if (matchLocation) {
+        res.json(matchLocation);
+      } else {
+        res.json("no match found");
+      }
+    }
+    if (location == "undefined") {
+      const allLocation = await parkingModel.find();
+      console.log(allLocation);
+      res.json(allLocation);
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
