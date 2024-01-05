@@ -20,6 +20,7 @@ module.exports.postBookingService = async (req, res) => {
       durationMinutes,
       startTime,
       endTime,
+      slotName,
     } = req.body;
 
     if (method == "minute") {
@@ -35,7 +36,7 @@ module.exports.postBookingService = async (req, res) => {
       // const endTime = moment(startTime).add(durationMinutes, "m").format();
       startTime = startTime.toISOString().slice(0, 16);
       endTime = endTime.toISOString().slice(0, 16);
-      console.log(startTime, endTime);
+
       const overlappingBooking = await bookingModel.findOne({
         $or: [
           {
@@ -55,7 +56,7 @@ module.exports.postBookingService = async (req, res) => {
         ],
       });
       if (overlappingBooking) {
-        return res.json({ error: "Overlapping minute booking detected" });
+        return res.json(overlappingBooking);
       }
 
       // Create the booking
@@ -65,13 +66,14 @@ module.exports.postBookingService = async (req, res) => {
         endTime: endTime,
         email: email,
         method: method,
+        slotName: slotName,
       });
       await newBooking.save();
 
       res.json({ message: "Booking created successfully" });
     }
     if (method == "hour") {
-      const overlappingBooking = await bookingModel.findOne({
+      const overlappingBooking = await bookingModel.find({
         $or: [
           {
             $and: [
@@ -89,16 +91,14 @@ module.exports.postBookingService = async (req, res) => {
           },
         ],
       });
-      if (overlappingBooking) {
-        console.log(overlappingBooking);
-        return res.json({ error: "Overlapping hour booking detected" });
-      }
+      console.log(overlappingBooking);
+      return res.json(overlappingBooking);
 
-      // Create the booking
+      /* Create the booking
       const newBooking = await bookingModel.create(req.body);
       await newBooking.save();
 
-      res.json({ message: "Booking created successfully" });
+      res.json({ message: "Booking created successfully" }); */
     }
     if (method == "day") {
       const { date } = req.body;
@@ -142,5 +142,56 @@ module.exports.postBookingService = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// create booking
+
+module.exports.createBookingService = async (req, res) => {
+  let {
+    method,
+    timeZone,
+    parkingId,
+    email,
+    durationMinutes,
+    startTime,
+    endTime,
+    slotName,
+  } = req.body;
+  const overlappingBooking = await bookingModel.find({
+    $or: [
+      {
+        $and: [
+          { startTime: { $lte: startTime } },
+          { endTime: { $gte: startTime } },
+          { parkingId: parkingId },
+          { slotName: slotName },
+        ],
+      },
+      {
+        $and: [
+          { startTime: { $lte: endTime } },
+          { endTime: { $gte: endTime } },
+          { parkingId: parkingId },
+          { slotName: slotName },
+        ],
+      },
+    ],
+  });
+  console.log(overlappingBooking);
+  if (overlappingBooking.length == 0) {
+    try {
+      if (method == "hour") {
+        const newBooking = await bookingModel.create(req.body);
+        await newBooking.save();
+        if (newBooking._id) {
+          res.json({ message: "Booking created successfully" });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    res.json({ error: "Booking already exists" });
   }
 };

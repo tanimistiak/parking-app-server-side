@@ -21,6 +21,9 @@ const bookingSchema = new mongoose.Schema(
     method: {
       type: String,
     },
+    slotName: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
