@@ -51,6 +51,12 @@ const parkingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    zoneName: {
+      type: String,
+    },
+    houseNumber: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

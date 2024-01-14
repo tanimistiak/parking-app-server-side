@@ -2,6 +2,7 @@ const {
   postBookingController,
   getAllBookingController,
   createBookingController,
+  bookingFindByIdController,
 } = require("../../controller/booking.controller");
 
 const bookingRouter = require("express").Router();
@@ -16,5 +17,7 @@ bookingRouter
 bookingRouter.route("/create-booking").post((req, res) => {
   createBookingController(req, res);
 });
-
+bookingRouter.route("/:id").get((req, res) => {
+  bookingFindByIdController(req, res);
+});
 module.exports = bookingRouter;

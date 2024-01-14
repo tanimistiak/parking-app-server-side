@@ -195,3 +195,20 @@ module.exports.createBookingService = async (req, res) => {
     res.json({ error: "Booking already exists" });
   }
 };
+
+module.exports.bookingFindByIdService = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const booking = await bookingModel.find();
+    const filteredBooking = booking.filter(
+      (booking) => booking.parkingId == id
+    );
+    // console.log(filteredBooking)
+    if (filteredBooking) {
+      res.json(filteredBooking);
+    } else {
+      res.json("no booking found for this slot");
+    }
+  } catch (error) {}
+};
